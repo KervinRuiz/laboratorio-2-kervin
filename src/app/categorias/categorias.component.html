@@ -1,0 +1,162 @@
+<!doctype html>
+
+<div class="pagina">
+
+  <header class="encabezado">
+    <div>
+      <a routerlink="/home" class="volver">← Volver al dashboard</a>
+      <p class="etiqueta">LABMANAGER / ADMINISTRACIÓN</p>
+      <h1>Gestión de categorías</h1>
+      <p class="subtitulo">
+        Organiza, consulta y administra las categorías del sistema.
+      </p>
+    </div>
+
+    <button
+      *ngIf="esAdministrador"
+      class="btn-principal"
+      (click)="nuevaCategoria()">
+      + Nueva categoría
+    </button>
+  </header>
+
+  <section class="estadisticas">
+    <div class="estadistica">
+      <span>Total de categorías</span>
+      <strong>{{ categorias.length }}</strong>
+      <small>Registradas en el sistema</small>
+    </div>
+
+    <div class="estadistica">
+      <span>Resultados visibles</span>
+      <strong>{{ categoriasFiltradas.length }}</strong>
+      <small>Según tu búsqueda</small>
+    </div>
+
+    <div class="estadistica">
+      <span>Tu acceso</span>
+      <strong class="rol">
+        {{ esAdministrador ? 'Administrador' : 'Consulta' }}
+      </strong>
+      <small>Permisos de la sesión</small>
+    </div>
+  </section>
+
+  <div *ngIf="mensaje" class="alerta exito">
+    {{ mensaje }}
+  </div>
+
+  <div *ngIf="error" class="alerta error">
+    {{ error }}
+  </div>
+
+  <section *ngIf="mostrarFormulario && esAdministrador" class="panel formulario">
+    <div class="panel-titulo">
+      <div>
+        <h2>
+          {{ categoriaEditando !== null ? 'Editar categoría' : 'Nueva categoría' }}
+        </h2>
+        <p>Completa los datos de la categoría.</p>
+      </div>
+
+      <button class="cerrar" (click)="cancelar()">✕</button>
+    </div>
+
+    <form (ngSubmit)="guardarCategoria()">
+
+      <label for="nombre">Nombre de la categoría</label>
+      <input
+        id="nombre"
+        name="nombre"
+        type="text"
+        [(ngModel)]="formulario.nombre"
+        placeholder="Ej. Tecnología"
+        maxlength="100"
+        required
+      />
+
+      <label for="descripcion">Descripción</label>
+      <textarea
+        id="descripcion"
+        name="descripcion"
+        [(ngModel)]="formulario.descripcion"
+        placeholder="Describe esta categoría..."
+        rows="4">
+      </textarea>
+
+      <div class="acciones-formulario">
+        <button type="button" class="btn-secundario" (click)="cancelar()">
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn-principal" [disabled]="guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar categoría' }}
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-titulo">
+      <div>
+        <h2>Listado de categorías</h2>
+        <p>Consulta las categorías registradas en la plataforma.</p>
+      </div>
+
+      <input
+        class="buscador"
+        type="search"
+        [(ngModel)]="busqueda"
+        placeholder="Buscar categoría..."
+        aria-label="Buscar categoría"
+      />
+    </div>
+
+    <p *ngIf="cargando" class="estado">
+      Cargando categorías...
+    </p>
+
+    <div *ngIf="!cargando" class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th *ngIf="esAdministrador">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let categoria of categoriasFiltradas">
+            <td class="id">#{{ categoria.id }}</td>
+            <td>
+              <span class="nombre-categoria">{{ categoria.nombre }}</span>
+            </td>
+            <td class="descripcion">{{ categoria.descripcion || 'Sin descripción' }}</td>
+
+            <td *ngIf="esAdministrador">
+              <div class="acciones">
+                <button class="btn-editar" (click)="editarCategoria(categoria)">
+                  Editar
+                </button>
+
+                <button class="btn-eliminar" (click)="eliminarCategoria(categoria)">
+                  Eliminar
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr *ngIf="categoriasFiltradas.length === 0">
+            <td [attr.colspan]="esAdministrador ? 4 : 3" class="estado">
+              No se encontraron categorías.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>

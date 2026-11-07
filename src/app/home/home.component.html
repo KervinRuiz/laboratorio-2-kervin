@@ -1,0 +1,199 @@
+<!doctype html>
+
+<div class="dashboard">
+
+  <aside class="sidebar" [class.open]="menuAbierto">
+
+    <div class="brand">
+      <div class="brand-logo">◆</div>
+      <div>
+        <strong>LabManager</strong>
+        <span>Panel administrativo</span>
+      </div>
+    </div>
+
+    <div class="navigation-label">NAVEGACIÓN</div>
+
+    <nav class="nav-menu">
+      <a routerLink="/home" class="nav-item active">
+        <span class="nav-icon">▦</span>
+        Panel principal
+      </a>
+
+      <a routerLink="/productos" class="nav-item">
+        <span class="nav-icon">▦</span>
+        Productos
+      </a>
+
+      <a routerLink="/categorias" class="nav-item">
+        <span class="nav-icon">◈</span>
+        Categorías
+      </a>
+
+      <a *ngIf="esAdministrador" routerLink="/usuarios" class="nav-item">
+        <span class="nav-icon">♙</span>
+        Usuarios
+      </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="user-info">
+        <div class="avatar">
+          {{ usuario.charAt(0).toUpperCase() }}
+        </div>
+        <div>
+          <strong>{{ usuario }}</strong>
+          <span>
+            {{ esAdministrador ? 'Administrador' : 'Usuario' }}
+          </span>
+        </div>
+      </div>
+
+      <button class="logout-button" (click)="cerrarSesion()">
+        <span>↪</span>
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" (click)="menuAbierto = !menuAbierto">
+          ☰
+        </button>
+
+        <div class="breadcrumb">
+          Administración <span>/</span> Inicio
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <span class="status-dot"></span>
+        <span class="status-text">Sesión iniciada</span>
+        <div class="topbar-avatar">
+          {{ usuario.charAt(0).toUpperCase() }}
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <section class="welcome-banner">
+        <div class="banner-content">
+          <span class="welcome-label">PANEL DE CONTROL</span>
+          <h1>¡Hola, {{ usuario }}! 👋</h1>
+          <p>
+            Bienvenido a tu espacio de administración.
+            Gestiona tus productos, categorías y usuarios
+            desde un solo lugar.
+          </p>
+        </div>
+        <div class="banner-decoration">✦</div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <h2>Módulos del sistema</h2>
+            <p>Selecciona el módulo que deseas administrar.</p>
+          </div>
+        </div>
+
+        <div class="module-grid">
+
+          <a routerLink="/productos" class="module-card">
+            <div class="module-icon purple">▣</div>
+            <h3>Productos</h3>
+            <p>
+              Consulta el inventario y administra
+              los productos disponibles.
+            </p>
+            <span class="module-link">Ir a productos →</span>
+          </a>
+
+          <a routerLink="/categorias" class="module-card">
+            <div class="module-icon blue">◈</div>
+            <h3>Categorías</h3>
+            <p>
+              Organiza y consulta las categorías
+              de los productos.
+            </p>
+            <span class="module-link">Ir a categorías →</span>
+          </a>
+
+          <a *ngIf="esAdministrador" routerLink="/usuarios" class="module-card">
+            <div class="module-icon green">♙</div>
+            <h3>Usuarios</h3>
+            <p>
+              Consulta los usuarios registrados
+              y sus roles dentro del sistema.
+            </p>
+            <span class="module-link">Ir a usuarios →</span>
+          </a>
+
+        </div>
+      </section>
+
+      <section class="bottom-grid">
+
+        <div class="info-card">
+          <div class="card-header">
+            <h3>Tu sesión</h3>
+            <span class="card-tag">ACTIVA</span>
+          </div>
+
+          <div class="info-row">
+            <span>Usuario</span>
+            <strong>{{ usuario }}</strong>
+          </div>
+
+          <div class="info-row">
+            <span>Rol asignado</span>
+            <strong>
+              {{ esAdministrador ? 'SUPER-ADMIN-ROLE' : 'USER' }}
+            </strong>
+          </div>
+
+          <div class="info-row">
+            <span>Autenticación</span>
+            <strong>JWT</strong>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="card-header">
+            <h3>Permisos de acceso</h3>
+          </div>
+
+          <div class="permission-item">
+            <span class="permission-check">✓</span>
+            Consultar productos
+          </div>
+
+          <div class="permission-item">
+            <span class="permission-check">✓</span>
+            Consultar categorías
+          </div>
+
+          <div class="permission-item" *ngIf="esAdministrador">
+            <span class="permission-check">✓</span>
+            Crear, editar y eliminar registros
+          </div>
+
+          <div class="permission-item" *ngIf="!esAdministrador">
+            <span class="permission-info">i</span>
+            Acceso de solo lectura
+          </div>
+        </div>
+
+      </section>
+
+      <footer class="footer">
+        Laboratorio 2 · CRUD Frontend · Angular 17
+      </footer>
+
+    </div>
+  </main>
+</div>

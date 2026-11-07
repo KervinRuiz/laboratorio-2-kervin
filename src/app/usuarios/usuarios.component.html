@@ -1,0 +1,43 @@
+<!doctype html>
+<div class="pagina">
+  <a routerLink="/home" class="volver">← Volver al dashboard</a>
+
+  <div class="encabezado">
+    <div>
+      <p class="etiqueta">LABMANAGER / ADMINISTRACIÓN</p>
+      <h1>Gestión de usuarios</h1>
+      <p>Consulta los usuarios registrados en el sistema.</p>
+    </div>
+  </div>
+
+  <section class="panel">
+    <h2>Usuarios registrados</h2>
+
+    <p *ngIf="cargando">Cargando usuarios...</p>
+    <p *ngIf="error" class="error">{{ error }}</p>
+
+    <table *ngIf="!cargando && !error">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let usuario of usuarios">
+          <td>#{{ usuario.id }}</td>
+          <td>{{ usuario.username }}</td>
+          <td>
+            <span class="rol">{{ usuario.rol }}</span>
+          </td>
+        </tr>
+
+        <tr *ngIf="usuarios.length === 0">
+          <td colspan="3">No hay usuarios registrados.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
